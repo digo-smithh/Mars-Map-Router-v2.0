@@ -1,4 +1,4 @@
-# Mars-Map-Router-Advanced
+# Mars-Map-Router-v2.0
 > A project for COTUCA's data structures II subject. It was developed in C# and presents a map route finder in Mars. The project uses files with the informations of Mars cities to find the best path between them.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
