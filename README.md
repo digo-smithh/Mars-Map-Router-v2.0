@@ -1,7 +1,8 @@
-# Mars-Map-Router-v2.0
-> A project for COTUCA's data structures II subject. It was developed in C# and presents a map route finder in Mars. The project uses files with the informations of Mars cities to find the best path between them.
+# Mars-Map-Router-v2.0 	<img align="right" src="https://img.shields.io/badge/c%23%20-%23239120.svg?&style=for-the-badge&logo=c-sharp&logoColor=white"/> <img img align="right" src="https://img.shields.io/badge/github%20-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/>
+> Final project for COTUCA's data structures II subject. It was developed in C# and presents a map route finder in Mars. The project uses files with the informations of Mars cities to find the best path between them. It's an advanced version of an existing project (https://github.com/edumigueis/Mars-Map-Router).
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Generic badge](https://img.shields.io/badge/Version-2.0-1abc9c.svg)](https://shields.io/)
 
 This project uses file data to put together a web of paths between cities. This information is used to find all paths and the best path between cities. Made using C# and Windows Forms. The main point of the project is the widespread use of different data structures, such as: graph, tree, binary tree, array, stack and multidimensional array.
 
