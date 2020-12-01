@@ -100,6 +100,9 @@ namespace apCaminhosMarte
                 label4.Visible = false;
                 dataGridView1.Visible = false;
                 dataGridView2.Visible = false;
+                radioButton4.Visible = false;
+                radioButton5.Visible = false;
+                radioButton6.Visible = false;
                 label8.Visible = false;
                 label5.Visible = true;
                 return;
@@ -117,6 +120,9 @@ namespace apCaminhosMarte
                 label4.Visible = false;
                 dataGridView1.Visible = false;
                 dataGridView2.Visible = false;
+                radioButton4.Visible = false;
+                radioButton5.Visible = false;
+                radioButton6.Visible = false;
                 achou = false;
             }
             else
@@ -128,10 +134,14 @@ namespace apCaminhosMarte
                 label4.Visible = true;
                 dataGridView1.Visible = true;
                 dataGridView2.Visible = true;
+                radioButton4.Visible = true;
+                radioButton5.Visible = true;
+                radioButton6.Visible = true;
                 achou = true;
                 ExibirTodosOsCaminhosNoDGV();
                 ExibirMelhorCaminhoNoDGV();
                 pbMapa.Refresh();
+                radioButton4.PerformClick();
             }
 
         }
@@ -223,6 +233,7 @@ namespace apCaminhosMarte
                 DesenharCidades("Poppins");
             }
         }
+
         //Inicialização do form
         private void FrmApp_Shown(object sender, EventArgs e)
         {
@@ -280,10 +291,28 @@ namespace apCaminhosMarte
             pbMapa.Refresh();
         }
 
-        /// <summary>
-        /// Método recursivo que desenha a árvore de cidades na tela.
-        /// </summary>
-        private void DesenharArvore(bool primeiraVez, NoArvore<Cidade> raiz, int x, int y, double angulo, double incremento, double comprimento, string font, Graphics g)
+        private void radioButton4_Click(object sender, EventArgs e)
+        {
+            ExibirMelhorCaminhoNoDGV();
+            pbMapa.Refresh();
+        }
+
+        private void radioButton5_Click(object sender, EventArgs e)
+        {
+            ExibirMelhorCaminhoNoDGV();
+            pbMapa.Refresh();
+        }
+
+        private void radioButton6_Click(object sender, EventArgs e)
+        {
+            ExibirMelhorCaminhoNoDGV();
+            pbMapa.Refresh();
+        }
+
+            /// <summary>
+            /// Método recursivo que desenha a árvore de cidades na tela.
+            /// </summary>
+            private void DesenharArvore(bool primeiraVez, NoArvore<Cidade> raiz, int x, int y, double angulo, double incremento, double comprimento, string font, Graphics g)
         {
             int xf, yf;
             if (raiz != null)
@@ -398,7 +427,15 @@ namespace apCaminhosMarte
         /// </summary>
         private void ExibirMelhorCaminhoNoDGV()
         {
-            ListaMelhorCaminho = Solucionador.BuscarMelhorCaminho(Resultados);
+            dataGridView2.Rows.Clear();
+            dataGridView2.Columns.Clear();
+
+            if (radioButton4.Checked)
+                ListaMelhorCaminho = Solucionador.BuscarMelhorCaminhoDistancia(Resultados);
+            else if (radioButton5.Checked)
+                ListaMelhorCaminho = Solucionador.BuscarMelhorCaminhoTempo(Resultados);
+            else
+                ListaMelhorCaminho = Solucionador.BuscarMelhorCaminhoCusto(Resultados);
 
             for (int i = 0; i < ListaMelhorCaminho.Length + 1; i++)
             {

@@ -78,11 +78,11 @@ namespace apCaminhosMarte.Data
         }
 
         /// <summary>
-        /// Busca o melhor caminhos dentre os vetores de AvancoCaminho guardados numa List.
+        /// Busca o melhor caminho, baseado na distância, dentre os vetores de AvancoCaminho guardados numa List.
         /// </summary>
         /// <param name="caminhos">List<AvancoCaminho[]> com todos os caminhos entre duas cidades.</param>
         /// <returns>Retorna um vetor de AvancoCaminho contendo  melhor caminho(menor distância) entre duas cidades.</returns>
-        static public AvancoCaminho[] BuscarMelhorCaminho(List<AvancoCaminho[]> caminhos)
+        static public AvancoCaminho[] BuscarMelhorCaminhoDistancia(List<AvancoCaminho[]> caminhos)
         {
             var distancias = new List<int>();
 
@@ -99,6 +99,54 @@ namespace apCaminhosMarte.Data
             }
 
             return caminhos[distancias.IndexOf(distancias.Min())];
+        }
+
+        /// <summary>
+        /// Busca o melhor caminho, baseado no tempo, dentre os vetores de AvancoCaminho guardados numa List.
+        /// </summary>
+        /// <param name="caminhos">List<AvancoCaminho[]> com todos os caminhos entre duas cidades.</param>
+        /// <returns>Retorna um vetor de AvancoCaminho contendo  melhor caminho(menor distância) entre duas cidades.</returns>
+        static public AvancoCaminho[] BuscarMelhorCaminhoTempo(List<AvancoCaminho[]> caminhos)
+        {
+            var tempos = new List<int>();
+
+            for (int i = 0; i < caminhos.Count; i++)
+            {
+                int tempo = 0;
+
+                for (int j = 0; j < caminhos[i].Length; j++)
+                {
+                    tempo += caminhos[i][j].Caminho.Tempo;
+                }
+
+                tempos.Add(tempo);
+            }
+
+            return caminhos[tempos.IndexOf(tempos.Min())];
+        }
+
+        /// <summary>
+        /// Busca o melhor caminho, baseado na custo, dentre os vetores de AvancoCaminho guardados numa List.
+        /// </summary>
+        /// <param name="caminhos">List<AvancoCaminho[]> com todos os caminhos entre duas cidades.</param>
+        /// <returns>Retorna um vetor de AvancoCaminho contendo  melhor caminho(menor distância) entre duas cidades.</returns>
+        static public AvancoCaminho[] BuscarMelhorCaminhoCusto(List<AvancoCaminho[]> caminhos)
+        {
+            var custos = new List<int>();
+
+            for (int i = 0; i < caminhos.Count; i++)
+            {
+                int custo = 0;
+
+                for (int j = 0; j < caminhos[i].Length; j++)
+                {
+                    custo += caminhos[i][j].Caminho.Custo;
+                }
+
+                custos.Add(custo);
+            }
+
+            return caminhos[custos.IndexOf(custos.Min())];
         }
     }
 }

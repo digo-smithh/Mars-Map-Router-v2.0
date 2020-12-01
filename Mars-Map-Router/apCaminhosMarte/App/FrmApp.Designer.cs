@@ -29,12 +29,14 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmApp));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpRotas = new System.Windows.Forms.TabPage();
             this.pbMapa = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
@@ -60,8 +62,9 @@
             this.panel8 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.radioButton5 = new System.Windows.Forms.RadioButton();
+            this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.tabControl1.SuspendLayout();
             this.tpRotas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbMapa)).BeginInit();
@@ -101,7 +104,7 @@
             this.tpRotas.Controls.Add(this.panel1);
             this.tpRotas.Location = new System.Drawing.Point(4, 24);
             this.tpRotas.Name = "tpRotas";
-            this.tpRotas.Padding = new System.Windows.Forms.Padding(3);
+            this.tpRotas.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
             this.tpRotas.Size = new System.Drawing.Size(1274, 554);
             this.tpRotas.TabIndex = 0;
             this.tpRotas.Text = "  Routes  ⛌  ";
@@ -127,6 +130,9 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.panel1.Controls.Add(this.radioButton6);
+            this.panel1.Controls.Add(this.radioButton5);
+            this.panel1.Controls.Add(this.radioButton4);
             this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.radioButton3);
@@ -143,12 +149,32 @@
             this.panel1.Size = new System.Drawing.Size(309, 557);
             this.panel1.TabIndex = 12;
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.ForeColor = System.Drawing.Color.Firebrick;
+            this.label8.Location = new System.Drawing.Point(11, 217);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(218, 30);
+            this.label8.TabIndex = 20;
+            this.label8.Text = "Nenhum caminho foi encontrado entre\r\nas cidades especificadas :(";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.Firebrick;
+            this.label5.Location = new System.Drawing.Point(12, 217);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(217, 30);
+            this.label5.TabIndex = 19;
+            this.label5.Text = "A cidade de destino deve ser diferente \r\nda cidade de origem :)";
+            // 
             // radioButton3
             // 
             this.radioButton3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(184, 523);
-            this.radioButton3.Margin = new System.Windows.Forms.Padding(2);
+            this.radioButton3.Location = new System.Drawing.Point(184, 522);
+            this.radioButton3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(105, 19);
             this.radioButton3.TabIndex = 18;
@@ -160,8 +186,8 @@
             // 
             this.radioButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(105, 523);
-            this.radioButton2.Margin = new System.Windows.Forms.Padding(2);
+            this.radioButton2.Location = new System.Drawing.Point(105, 522);
+            this.radioButton2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(76, 19);
             this.radioButton2.TabIndex = 17;
@@ -173,8 +199,8 @@
             // 
             this.radioButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(16, 523);
-            this.radioButton1.Margin = new System.Windows.Forms.Padding(2);
+            this.radioButton1.Location = new System.Drawing.Point(16, 522);
+            this.radioButton1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(86, 19);
             this.radioButton1.TabIndex = 16;
@@ -369,14 +395,14 @@
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.ColumnHeadersVisible = false;
             this.dataGridView2.Cursor = System.Windows.Forms.Cursors.SizeAll;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.WhiteSmoke;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle9;
             this.dataGridView2.Location = new System.Drawing.Point(17, 240);
             this.dataGridView2.MultiSelect = false;
             this.dataGridView2.Name = "dataGridView2";
@@ -400,20 +426,20 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ColumnHeadersVisible = false;
             this.dataGridView1.Cursor = System.Windows.Forms.Cursors.SizeAll;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.WhiteSmoke;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle6;
-            this.dataGridView1.Location = new System.Drawing.Point(18, 324);
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.MediumTurquoise;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle10;
+            this.dataGridView1.Location = new System.Drawing.Point(18, 363);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.Size = new System.Drawing.Size(256, 149);
+            this.dataGridView1.Size = new System.Drawing.Size(256, 110);
             this.dataGridView1.TabIndex = 9;
             this.dataGridView1.Visible = false;
             // 
@@ -424,7 +450,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(15, 299);
+            this.label3.Location = new System.Drawing.Point(15, 337);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(78, 17);
             this.label3.TabIndex = 5;
@@ -436,7 +462,7 @@
             this.tpArvore.Controls.Add(this.panel7);
             this.tpArvore.Location = new System.Drawing.Point(4, 24);
             this.tpArvore.Name = "tpArvore";
-            this.tpArvore.Padding = new System.Windows.Forms.Padding(3);
+            this.tpArvore.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
             this.tpArvore.Size = new System.Drawing.Size(1274, 554);
             this.tpArvore.TabIndex = 1;
             this.tpArvore.Text = "   Tree  🌲  ";
@@ -488,25 +514,43 @@
             this.label6.Text = "This is a representation of a Binary Tree Data Structure used to\r\nstore the citie" +
     "s\' data into RAM.";
             // 
-            // label5
+            // radioButton4
             // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.Firebrick;
-            this.label5.Location = new System.Drawing.Point(12, 217);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(217, 30);
-            this.label5.TabIndex = 19;
-            this.label5.Text = "A cidade de destino deve ser diferente \r\nda cidade de origem :)";
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Checked = true;
+            this.radioButton4.Location = new System.Drawing.Point(30, 292);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(73, 19);
+            this.radioButton4.TabIndex = 21;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "Distance";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButton4.Visible = false;
+            this.radioButton4.Click += new System.EventHandler(this.radioButton4_Click);
             // 
-            // label8
+            // radioButton5
             // 
-            this.label8.AutoSize = true;
-            this.label8.ForeColor = System.Drawing.Color.Firebrick;
-            this.label8.Location = new System.Drawing.Point(11, 217);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(218, 30);
-            this.label8.TabIndex = 20;
-            this.label8.Text = "Nenhum caminho foi encontrado entre\r\nas cidades especificadas :(";
+            this.radioButton5.AutoSize = true;
+            this.radioButton5.Location = new System.Drawing.Point(132, 292);
+            this.radioButton5.Name = "radioButton5";
+            this.radioButton5.Size = new System.Drawing.Size(53, 19);
+            this.radioButton5.TabIndex = 22;
+            this.radioButton5.Text = "Time";
+            this.radioButton5.UseVisualStyleBackColor = true;
+            this.radioButton5.Visible = false;
+            this.radioButton5.Click += new System.EventHandler(this.radioButton5_Click);
+            // 
+            // radioButton6
+            // 
+            this.radioButton6.AutoSize = true;
+            this.radioButton6.Location = new System.Drawing.Point(214, 292);
+            this.radioButton6.Name = "radioButton6";
+            this.radioButton6.Size = new System.Drawing.Size(49, 19);
+            this.radioButton6.TabIndex = 23;
+            this.radioButton6.Text = "Cost";
+            this.radioButton6.UseVisualStyleBackColor = true;
+            this.radioButton6.Visible = false;
+            this.radioButton6.Click += new System.EventHandler(this.radioButton6_Click);
             // 
             // FrmApp
             // 
@@ -516,10 +560,10 @@
             this.ClientSize = new System.Drawing.Size(1275, 581);
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(902, 573);
+            this.MinimumSize = new System.Drawing.Size(902, 571);
             this.Name = "FrmApp";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Mars Maps";
+            this.Text = "Mars Maps v2.0";
             this.TransparencyKey = System.Drawing.Color.LightGray;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FrmApp_Load);
@@ -580,6 +624,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.RadioButton radioButton6;
+        private System.Windows.Forms.RadioButton radioButton5;
+        private System.Windows.Forms.RadioButton radioButton4;
     }
 }
 
