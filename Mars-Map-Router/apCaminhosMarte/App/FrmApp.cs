@@ -10,7 +10,6 @@ using System.Windows.Forms;
 
 namespace apCaminhosMarte
 {
-
     public partial class FrmApp : Form
     {
         private bool achou = false;
@@ -112,7 +111,7 @@ namespace apCaminhosMarte
             destino = Arvore.Busca(new Cidade((lsbDestino.SelectedItem as LsbItems).Id, default, default, default)); //descobre destino
 
             if (!Solucionador.BuscarCaminhos(ref caminhoEncontrado, ref resultados, arvore, origem, destino, ref matrizCaminhos)) // chama o método de solução de caminhos
-            { 
+            {
                 //não achou caminhos
                 label5.Visible = false;
                 label8.Visible = true;
@@ -143,8 +142,8 @@ namespace apCaminhosMarte
                 pbMapa.Refresh();
                 radioButton4.PerformClick();
             }
-
         }
+
         //Ambos os event handlers abaixo para DrawItem são para personalização da cor de seleção das ListBoxes.
         private void lsbOrigem_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -242,7 +241,7 @@ namespace apCaminhosMarte
             pb.Height = panel7.Height;
             pb.SizeMode = PictureBoxSizeMode.AutoSize;
             Bitmap bmp = new Bitmap(panel7.Width, panel7.Height);
-            DesenharArvore(true, Arvore.Raiz, bmp.Width / 2, 80, (Math.PI / 180) * 90, 1, 400, "Poppins", Graphics.FromImage(bmp));
+            DesenharArvore(true, Arvore.Raiz, bmp.Width / 2, 80, (Math.PI / 180) * 90, 1.2, 500, "Poppins", Graphics.FromImage(bmp));
             pb.Image = bmp;
 
             panel7.Controls.Add(pb);
@@ -309,10 +308,10 @@ namespace apCaminhosMarte
             pbMapa.Refresh();
         }
 
-            /// <summary>
-            /// Método recursivo que desenha a árvore de cidades na tela.
-            /// </summary>
-            private void DesenharArvore(bool primeiraVez, NoArvore<Cidade> raiz, int x, int y, double angulo, double incremento, double comprimento, string font, Graphics g)
+        /// <summary>
+        /// Método recursivo que desenha a árvore de cidades na tela.
+        /// </summary>
+        private void DesenharArvore(bool primeiraVez, NoArvore<Cidade> raiz, int x, int y, double angulo, double incremento, double comprimento, string font, Graphics g)
         {
             int xf, yf;
             if (raiz != null)
@@ -330,7 +329,7 @@ namespace apCaminhosMarte
                 DesenharArvore(false, raiz.Dir, xf, yf, Math.PI / 2 - incremento,
                 incremento * 0.60, comprimento * 0.8, font, g);
                 SolidBrush preenchimento = new SolidBrush(Color.MediumTurquoise);
-                g.FillRectangle(preenchimento, xf - 45, yf, 90, 30);
+                g.FillRectangle(preenchimento, xf - 45, yf, 80, 30);
                 g.DrawString(Convert.ToString(raiz.Info.Nome), new Font(font, 7),
                 new SolidBrush(Color.White), xf - 40, yf + 8);
             }
