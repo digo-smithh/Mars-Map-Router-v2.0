@@ -15,6 +15,31 @@ namespace apCaminhosMarte.Data
         public ArvoreBinaria()
         { }
 
+        public int AlturaArvore(NoArvore<T> atual, ref bool balanceada)
+        {
+            int alturaDireita, alturaEsquerda, result;
+            if (atual != null && balanceada)
+            {
+                alturaEsquerda = 1 + AlturaArvore(atual.Esq, ref balanceada);
+                alturaDireita = 1 + AlturaArvore(atual.Dir, ref balanceada);
+                result = Math.Max(alturaEsquerda, alturaDireita);
+
+                if (Math.Abs(alturaDireita - alturaEsquerda) > 1)
+                    balanceada = false;
+            }
+            else
+                result = 0;
+            return result;
+        }
+
+        public int GetAltura(NoArvore<T> no)
+        {
+            if (no != null)
+                return no.Altura;
+            else
+                return -1;
+        }
+
         public void Incluir(T info)
         {
             if (this.Raiz == null)
@@ -23,36 +48,73 @@ namespace apCaminhosMarte.Data
                 qtd++;
             }
             else
-                IncluirRec(Raiz, info);
+                IncluirRecBaleanceada(Raiz, info);
         }
 
-        private void IncluirRec(NoArvore<T> atual, T info)
+        public NoArvore<T> IncluirRecBaleanceada(NoArvore<T> noAtual, T item)
         {
-            int comp = info.CompareTo(atual.Info);
-
-            if (comp == 0)
-                throw new Exception("Item já existente!");
-
-            if (comp < 0)
-            {
-                if (atual.Esq == null)
-                {
-                    atual.Esq = new NoArvore<T>(info);
-                    qtd++;
-                }
-                else
-                    IncluirRec(atual.Esq, info);
-            }
+            if (noAtual == null)
+                noAtual = new NoArvore<T>(item);
             else
             {
-                if (atual.Dir == null)
+                if (item.CompareTo(noAtual.Info) < 0)
                 {
-                    atual.Dir = new NoArvore<T>(info);
-                    qtd++;
+                    noAtual.Esq = IncluirRecBaleanceada(noAtual.Esq, item);
+                    if (GetAltura(noAtual.Esq) - GetAltura(noAtual.Dir) == 2)  
+                        if (item.CompareTo(noAtual.Esq.Info) < 0)
+                            noAtual = RotacaoSimplesComFilhoEsquerdo(noAtual);
+                        else
+                            noAtual = RotacaoDuplaComFilhoEsquerdo(noAtual);
                 }
-                else
-                    IncluirRec(atual.Dir, info);
+                else if (item.CompareTo(noAtual.Info) > 0)
+                {
+                    noAtual.Dir = IncluirRecBaleanceada(noAtual.Dir, item);
+                    if (GetAltura(noAtual.Dir) - GetAltura(noAtual.Esq) == 2)  
+                        if (item.CompareTo(noAtual.Dir.Info) > 0)
+                            noAtual = RotacaoSimplesComFilhoDireito(noAtual);
+                        else
+                            noAtual = RotacaoDuplaComFilhoDireito(noAtual);
+                }
+
+                noAtual.Altura = Math.Max(GetAltura(noAtual.Esq), GetAltura(noAtual.Dir)) + 1;
             }
+            return noAtual;
+        }
+
+        private NoArvore<T> RotacaoSimplesComFilhoEsquerdo(NoArvore<T> no)
+        {
+            NoArvore<T> temp = no.Esq;
+            no.Esq = temp.Dir;
+            temp.Dir = no;
+            if (Raiz.Equals(no))
+                Raiz = temp;
+            no.Altura = Math.Max(GetAltura(no.Esq), GetAltura(no.Dir)) + 1;
+            temp.Altura = Math.Max(GetAltura(temp.Esq), GetAltura(no)) + 1;
+            return temp;
+        }
+
+        private NoArvore<T> RotacaoSimplesComFilhoDireito(NoArvore<T> no)
+        {
+            NoArvore<T> temp = no.Dir;
+            no.Dir = temp.Esq;
+            temp.Esq = no;
+            if (Raiz.Equals(no))
+                Raiz = temp;
+            no.Altura = Math.Max(GetAltura(no.Esq), GetAltura(no.Dir)) + 1;
+            temp.Altura = Math.Max(GetAltura(temp.Dir), GetAltura(no)) + 1;
+            return temp;
+        }
+
+        private NoArvore<T> RotacaoDuplaComFilhoEsquerdo(NoArvore<T> no)
+        {
+            no.Esq = RotacaoSimplesComFilhoDireito(no.Esq);
+            return RotacaoSimplesComFilhoEsquerdo(no);
+        }
+
+        private NoArvore<T> RotacaoDuplaComFilhoDireito(NoArvore<T> no)
+        {
+            no.Dir = RotacaoSimplesComFilhoEsquerdo(no.Dir);
+            return RotacaoSimplesComFilhoDireito(no);
         }
 
         public T Busca(T buscado)
@@ -89,7 +151,7 @@ namespace apCaminhosMarte.Data
             result.Add(atual.Info);
             Converter(atual.Esq, ref result);
             Converter(atual.Dir, ref result);
-        }   
-       
+        }
+
     }
 }
