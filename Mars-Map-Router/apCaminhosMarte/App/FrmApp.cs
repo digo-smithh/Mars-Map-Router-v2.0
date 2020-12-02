@@ -249,6 +249,7 @@ namespace apCaminhosMarte
             panel7.Controls[panel7.Controls.IndexOf(panel8)].BringToFront();
 
             radioButton3.PerformClick();
+            radioButton7.PerformClick();
         }
 
         /// <summary>

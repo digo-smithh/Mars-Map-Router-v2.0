@@ -54,13 +54,16 @@ namespace apCaminhosMarte.Data
         public NoArvore<T> IncluirRecBaleanceada(NoArvore<T> noAtual, T item)
         {
             if (noAtual == null)
+            {
                 noAtual = new NoArvore<T>(item);
+                qtd++;
+            }
             else
             {
                 if (item.CompareTo(noAtual.Info) < 0)
                 {
                     noAtual.Esq = IncluirRecBaleanceada(noAtual.Esq, item);
-                    if (GetAltura(noAtual.Esq) - GetAltura(noAtual.Dir) == 2)  
+                    if (GetAltura(noAtual.Esq) - GetAltura(noAtual.Dir) == 2)
                         if (item.CompareTo(noAtual.Esq.Info) < 0)
                             noAtual = RotacaoSimplesComFilhoEsquerdo(noAtual);
                         else
@@ -69,7 +72,7 @@ namespace apCaminhosMarte.Data
                 else if (item.CompareTo(noAtual.Info) > 0)
                 {
                     noAtual.Dir = IncluirRecBaleanceada(noAtual.Dir, item);
-                    if (GetAltura(noAtual.Dir) - GetAltura(noAtual.Esq) == 2)  
+                    if (GetAltura(noAtual.Dir) - GetAltura(noAtual.Esq) == 2)
                         if (item.CompareTo(noAtual.Dir.Info) > 0)
                             noAtual = RotacaoSimplesComFilhoDireito(noAtual);
                         else
