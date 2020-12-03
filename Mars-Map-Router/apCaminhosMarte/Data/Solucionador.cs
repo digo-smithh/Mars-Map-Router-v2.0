@@ -20,13 +20,33 @@ namespace apCaminhosMarte.Data
         /// <param name="destino">Objeto de Cidade que representa o destino final</param>
         /// <param name="matrizCaminhos">Matriz esparssa de caminhos.</param>
         /// <returns>Retorna true se existe caminho e false se não existe</returns>
-        static public bool BuscarCaminhos(ref Stack<AvancoCaminho> caminhoEncontrado, ref List<AvancoCaminho[]> resultados, ArvoreBinaria<Cidade> arvore, Cidade origem, Cidade destino, ref AvancoCaminho[,] matrizCaminhos)
+        static public bool BuscarCaminhosR(ref Stack<AvancoCaminho> caminhoEncontrado, ref List<AvancoCaminho[]> resultados, ArvoreBinaria<Cidade> arvore, Cidade origem, Cidade destino, ref AvancoCaminho[,] matrizCaminhos)
         {
             caminhoEncontrado = new Stack<AvancoCaminho>();
             resultados = new List<AvancoCaminho[]>();
             var passou = new bool[arvore.Qtd];
 
-            BuscarCaminhosRec(origem, ref destino, ref matrizCaminhos, ref caminhoEncontrado, ref resultados, ref passou);
+            BuscarCaminhosRecursivo(origem, ref destino, ref matrizCaminhos, ref caminhoEncontrado, ref resultados, ref passou);
+
+            if (resultados.Count <= 0)
+                return false;
+
+            return true;
+        }
+
+        static public bool BuscarCaminhosP(ref Stack<AvancoCaminho> caminhoEncontrado, ref List<AvancoCaminho[]> resultados, ArvoreBinaria<Cidade> arvore, Cidade origem, Cidade destino, ref AvancoCaminho[,] matrizCaminhos)
+        {
+            caminhoEncontrado = new Stack<AvancoCaminho>();
+            resultados = new List<AvancoCaminho[]>();
+            var passou = new bool[arvore.Qtd];
+            bool repetir;
+            Cidade atual = origem;
+
+            do
+            {
+                repetir = BuscarCaminhosPilhas(ref atual, ref destino, ref matrizCaminhos, ref caminhoEncontrado, ref resultados, ref passou);
+            }
+            while (repetir);
 
             if (resultados.Count <= 0)
                 return false;
@@ -43,7 +63,7 @@ namespace apCaminhosMarte.Data
         /// <param name="caminhoEncontrado">Stack que contém a sucessão de AvancosCaminhos para chegar ao destino final.</param>
         /// <param name="resultados">Conjunto de stacks que possuem todas as relções de caminhos do origem inicial a destino final.</param>
         /// <param name="passou">Vetor boolean que especifica se a iteração do método passou por uma cidade específica (relativo ao id).</param>
-        static private void BuscarCaminhosRec(Cidade atual, ref Cidade destino, ref AvancoCaminho[,] matrizCaminhos, ref Stack<AvancoCaminho> caminhoEncontrado, ref List<AvancoCaminho[]> resultados, ref bool[] passou)
+        static private void BuscarCaminhosRecursivo(Cidade atual, ref Cidade destino, ref AvancoCaminho[,] matrizCaminhos, ref Stack<AvancoCaminho> caminhoEncontrado, ref List<AvancoCaminho[]> resultados, ref bool[] passou)
         {
             for (int j = 0; j < matrizCaminhos.GetLength(1); j++)
             {
@@ -65,7 +85,7 @@ namespace apCaminhosMarte.Data
                     }
                     else
                     {
-                        BuscarCaminhosRec(ac.Destino, ref destino, ref matrizCaminhos, ref caminhoEncontrado, ref resultados, ref passou);
+                        BuscarCaminhosRecursivo(ac.Destino, ref destino, ref matrizCaminhos, ref caminhoEncontrado, ref resultados, ref passou);
                     }
                 }
             }
@@ -75,6 +95,43 @@ namespace apCaminhosMarte.Data
                 caminhoEncontrado.Pop();
                 passou[atual.Id] = false;
             }
+        }
+
+        static public bool BuscarCaminhosPilhas(ref Cidade atual, ref Cidade destino, ref AvancoCaminho[,] matrizCaminhos, ref Stack<AvancoCaminho> caminhoEncontrado, ref List<AvancoCaminho[]> resultados, ref bool[] passou)
+        {
+            for (int j = 0; j < matrizCaminhos.GetLength(1); j++)
+            {
+                AvancoCaminho ac = matrizCaminhos[atual.Id, j];
+
+                if (ac != null && !passou[j])
+                {
+                    passou[atual.Id] = true;
+                    caminhoEncontrado.Push(ac);
+
+                    if (j == destino.Id)
+                    {
+                        var caminho = new AvancoCaminho[caminhoEncontrado.Count];
+                        caminhoEncontrado.CopyTo(caminho, 0);
+
+                        resultados.Add(caminho);
+                        caminhoEncontrado.Pop();
+                        passou[atual.Id] = false;
+                    }
+                    else
+                    {
+                        atual = ac.Destino;
+                        return true;
+                    }
+                }
+            }
+
+            if (caminhoEncontrado.Count != 0)
+            {
+                caminhoEncontrado.Pop();
+                passou[atual.Id] = false;
+            }
+
+            return false;
         }
 
         /// <summary>

@@ -110,7 +110,14 @@ namespace apCaminhosMarte
             origem = Arvore.Busca(new Cidade((lsbOrigem.SelectedItem as LsbItems).Id, default, default, default)); // descobre origem
             destino = Arvore.Busca(new Cidade((lsbDestino.SelectedItem as LsbItems).Id, default, default, default)); //descobre destino
 
-            if (!Solucionador.BuscarCaminhos(ref caminhoEncontrado, ref resultados, arvore, origem, destino, ref matrizCaminhos)) // chama o método de solução de caminhos
+            bool temSolucao = false;
+
+            if (radioButton7.Checked)
+                temSolucao = Solucionador.BuscarCaminhosR(ref caminhoEncontrado, ref resultados, arvore, origem, destino, ref matrizCaminhos);
+            else if (radioButton9.Checked)
+                temSolucao = Solucionador.BuscarCaminhosP(ref caminhoEncontrado, ref resultados, arvore, origem, destino, ref matrizCaminhos);
+
+            if (!temSolucao) // chama o método de solução de caminhos
             {
                 //não achou caminhos
                 label5.Visible = false;
