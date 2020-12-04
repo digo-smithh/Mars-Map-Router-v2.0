@@ -35,6 +35,7 @@ namespace apCaminhosMarte
         private string cidadeClicada;
         private bool dbClick0 = false;
         private bool dbClick = false;
+        private bool radio = false;
         private List<AvancoCaminho> listaCaminho = new List<AvancoCaminho>();
 
         public FrmApp()
@@ -91,6 +92,7 @@ namespace apCaminhosMarte
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
             achou = false;
+            radio = true;
             dgvClicado = false;
             pbMapa.Refresh();
 
@@ -98,6 +100,9 @@ namespace apCaminhosMarte
             dataGridView2.Rows.Clear();
             dataGridView1.Columns.Clear();
             dataGridView2.Columns.Clear(); //limpa dgvs
+
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             if (lsbOrigem.SelectedIndex == lsbDestino.SelectedIndex)
             {
@@ -122,7 +127,7 @@ namespace apCaminhosMarte
                 temSolucao = Solucionador.BuscarCaminhosR(ref caminhoEncontrado, ref resultados, arvore, origem, destino, ref matrizCaminhos);
             else if (radioButton9.Checked)
                 temSolucao = Solucionador.BuscarCaminhosP(ref caminhoEncontrado, ref resultados, arvore, origem, destino, ref matrizCaminhos);
-                //dijkstra
+            //dijkstra
 
             if (!temSolucao) // chama o método de solução de caminhos
             {
@@ -247,10 +252,13 @@ namespace apCaminhosMarte
                     DesenharCidades("Poppins");
                 }
 
-                if(dbClick)
+                if (dbClick)
                     DesenharCaminhoEspecifico(Color.FromArgb(210, 30, 20));
                 else if (dbClick0)
+                {
                     DesenharCaminhoEspecifico(Color.FromArgb(0, 0, 185));
+                    radio = true;
+                }
 
                 listaCaminho.Clear();
             }
@@ -327,6 +335,7 @@ namespace apCaminhosMarte
 
         private void radioButton1_Click(object sender, EventArgs e)
         {
+
             pbMapa.Refresh();
         }
 
@@ -342,18 +351,27 @@ namespace apCaminhosMarte
 
         private void radioButton4_Click(object sender, EventArgs e)
         {
+            if (!radio)
+                return;
+
             ExibirMelhorCaminhoNoDGV();
             pbMapa.Refresh();
         }
 
         private void radioButton5_Click(object sender, EventArgs e)
         {
+            if (!radio)
+                return;
+
             ExibirMelhorCaminhoNoDGV();
             pbMapa.Refresh();
         }
 
         private void radioButton6_Click(object sender, EventArgs e)
         {
+            if (!radio)
+                return;
+
             ExibirMelhorCaminhoNoDGV();
             pbMapa.Refresh();
         }
@@ -363,6 +381,7 @@ namespace apCaminhosMarte
             if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null)
                 return;
             dgvClicado = true;
+            radio = false;
             cidadeClicada = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
             dataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
@@ -374,17 +393,19 @@ namespace apCaminhosMarte
             if (dataGridView2.Rows[0].Cells[e.ColumnIndex].Value.ToString() == null)
                 return;
             dgvClicado = true;
+            radio = false;
             cidadeClicada = dataGridView2.Rows[0].Cells[e.ColumnIndex].Value.ToString();
             dataGridView2.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dataGridView2.Rows[0].Cells[e.ColumnIndex].Selected = true;
-            pbMapa.Refresh();    
+            pbMapa.Refresh();
         }
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             dgvClicado = false;
+            radio = false;
 
-            if(e.RowIndex == 0)
+            if (e.RowIndex == 0)
                 dbClick0 = true;
             else
                 dbClick = true;
@@ -402,6 +423,7 @@ namespace apCaminhosMarte
         private void dataGridView2_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             dgvClicado = false;
+            radio = true;
             dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView2.Rows[0].Selected = true;
             pbMapa.Refresh();
@@ -440,7 +462,7 @@ namespace apCaminhosMarte
             {
                 string cidadeDGV;
 
-                if(cidadeClicada.Contains(" ->"))
+                if (cidadeClicada.Contains(" ->"))
                     cidadeDGV = Arvore.Busca(new Cidade(i, default, default, default)).Nome + " ->";
                 else
                     cidadeDGV = Arvore.Busca(new Cidade(i, default, default, default)).Nome;
