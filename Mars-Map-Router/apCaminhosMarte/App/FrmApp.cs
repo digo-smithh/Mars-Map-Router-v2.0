@@ -31,6 +31,11 @@ namespace apCaminhosMarte
         internal AvancoCaminho[] ListaMelhorCaminho { get => listaMelhorCaminho; set => listaMelhorCaminho = value; }
 
         private PictureBox pbAnterior = new PictureBox();
+        private bool dgvClicado = false;
+        private string cidadeClicada;
+        private bool dbClick0 = false;
+        private bool dbClick = false;
+        private List<AvancoCaminho> listaCaminho = new List<AvancoCaminho>();
 
         public FrmApp()
         {
@@ -86,6 +91,7 @@ namespace apCaminhosMarte
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
             achou = false;
+            dgvClicado = false;
             pbMapa.Refresh();
 
             dataGridView1.Rows.Clear();
@@ -116,6 +122,7 @@ namespace apCaminhosMarte
                 temSolucao = Solucionador.BuscarCaminhosR(ref caminhoEncontrado, ref resultados, arvore, origem, destino, ref matrizCaminhos);
             else if (radioButton9.Checked)
                 temSolucao = Solucionador.BuscarCaminhosP(ref caminhoEncontrado, ref resultados, arvore, origem, destino, ref matrizCaminhos);
+                //dijkstra
 
             if (!temSolucao) // chama o método de solução de caminhos
             {
@@ -218,26 +225,61 @@ namespace apCaminhosMarte
         {
             g = e.Graphics;
 
-            if (radioButton1.Checked)
+            if (dgvClicado)
             {
-                DesenharCidades("Poppins");
+                DesenharCidade(cidadeClicada, "Poppins");
             }
-            else if (radioButton2.Checked)
+            else if (dbClick0 || dbClick)
             {
-                DesenharLinhas();
-                DesenharCidades("Poppins");
+
+                if (radioButton1.Checked)
+                {
+                    DesenharCidades("Poppins");
+                }
+                else if (radioButton2.Checked)
+                {
+                    DesenharLinhas();
+                    DesenharCidades("Poppins");
+                }
+                else
+                {
+                    DesenharLinhasComSetas();
+                    DesenharCidades("Poppins");
+                }
+
+                if(dbClick)
+                    DesenharCaminhoEspecifico(Color.FromArgb(210, 30, 20));
+                else if (dbClick0)
+                    DesenharCaminhoEspecifico(Color.FromArgb(0, 0, 185));
+
+                listaCaminho.Clear();
             }
             else
             {
-                DesenharLinhasComSetas();
-                DesenharCidades("Poppins");
+                if (radioButton1.Checked)
+                {
+                    DesenharCidades("Poppins");
+                }
+                else if (radioButton2.Checked)
+                {
+                    DesenharLinhas();
+                    DesenharCidades("Poppins");
+                }
+                else
+                {
+                    DesenharLinhasComSetas();
+                    DesenharCidades("Poppins");
+                }
+
+                if (achou)
+                {
+                    DesenharMelhorCaminho();
+                    DesenharCidades("Poppins");
+                }
             }
 
-            if (achou)
-            {
-                DesenharMelhorCaminho();
-                DesenharCidades("Poppins");
-            }
+            dbClick = false;
+            dbClick0 = false;
         }
 
         //Inicialização do form
@@ -316,6 +358,55 @@ namespace apCaminhosMarte
             pbMapa.Refresh();
         }
 
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null)
+                return;
+            dgvClicado = true;
+            cidadeClicada = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+            pbMapa.Refresh();
+        }
+
+        private void dataGridView2_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView2.Rows[0].Cells[e.ColumnIndex].Value.ToString() == null)
+                return;
+            dgvClicado = true;
+            cidadeClicada = dataGridView2.Rows[0].Cells[e.ColumnIndex].Value.ToString();
+            dataGridView2.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            dataGridView2.Rows[0].Cells[e.ColumnIndex].Selected = true;
+            pbMapa.Refresh();    
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dgvClicado = false;
+
+            if(e.RowIndex == 0)
+                dbClick0 = true;
+            else
+                dbClick = true;
+
+            for (int i = 0; i < Resultados[e.RowIndex].Length; i++)
+            {
+                listaCaminho.Add(Resultados[e.RowIndex][i]);
+            }
+
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.Rows[e.RowIndex].Selected = true;
+            pbMapa.Refresh();
+        }
+
+        private void dataGridView2_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dgvClicado = false;
+            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView2.Rows[0].Selected = true;
+            pbMapa.Refresh();
+        }
+
         /// <summary>
         /// Método recursivo que desenha a árvore de cidades na tela.
         /// </summary>
@@ -340,6 +431,29 @@ namespace apCaminhosMarte
                 g.FillRectangle(preenchimento, xf - 45, yf, 80, 30);
                 g.DrawString(Convert.ToString(raiz.Info.Nome), new Font(font, 7),
                 new SolidBrush(Color.White), xf - 40, yf + 8);
+            }
+        }
+
+        private void DesenharCidade(string cidadeClicada, string font)
+        {
+            for (int i = 0; i < Arvore.Qtd; i++)
+            {
+                string cidadeDGV;
+
+                if(cidadeClicada.Contains(" ->"))
+                    cidadeDGV = Arvore.Busca(new Cidade(i, default, default, default)).Nome + " ->";
+                else
+                    cidadeDGV = Arvore.Busca(new Cidade(i, default, default, default)).Nome;
+
+                if (cidadeDGV.Equals(cidadeClicada))
+                {
+                    var cidade = new Cidade(i, default, default, default);
+                    int x = (Arvore.Busca(cidade).X * pbMapa.Width) / 4096;
+                    int y = (Arvore.Busca(cidade).Y * pbMapa.Height) / 2048;
+
+                    g.FillRectangle(new SolidBrush(Color.Black), x - 3, y - 3, 6, 6);
+                    g.DrawString(Arvore.Busca(cidade).Nome, new Font(font, 8, FontStyle.Bold), new SolidBrush(Color.Black), x + 3, y + 2);
+                }
             }
         }
 
@@ -480,6 +594,17 @@ namespace apCaminhosMarte
                 AdjustableArrowCap bigArrow = new AdjustableArrowCap(5, 8);
                 c.CustomEndCap = bigArrow;
                 g.DrawLine(c, (ListaMelhorCaminho[i].Origem.X * pbMapa.Width) / 4096, (ListaMelhorCaminho[i].Origem.Y * pbMapa.Height) / 2048, (ListaMelhorCaminho[i].Destino.X * pbMapa.Width) / 4096, (ListaMelhorCaminho[i].Destino.Y * pbMapa.Height) / 2048);
+            }
+        }
+
+        private void DesenharCaminhoEspecifico(Color color)
+        {
+            for (int i = 0; i < listaCaminho.Count; i++)
+            {
+                Pen c = new Pen(color, 2);
+                AdjustableArrowCap bigArrow = new AdjustableArrowCap(5, 8);
+                c.CustomEndCap = bigArrow;
+                g.DrawLine(c, (listaCaminho[i].Origem.X * pbMapa.Width) / 4096, (listaCaminho[i].Origem.Y * pbMapa.Height) / 2048, (listaCaminho[i].Destino.X * pbMapa.Width) / 4096, (listaCaminho[i].Destino.Y * pbMapa.Height) / 2048);
             }
         }
     }
