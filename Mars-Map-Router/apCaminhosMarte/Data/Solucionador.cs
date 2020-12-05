@@ -128,9 +128,10 @@ namespace apCaminhosMarte.Data
 
             if (caminhoEncontrado.Count != 0)
             {
-                passou[atual.Id] = true;
-                atual = caminhoEncontrado.Peek().Destino;
+                passou[atual.Id] = true;   
                 caminhoEncontrado.Pop();
+                if (caminhoEncontrado.Count != 0)
+                    atual = caminhoEncontrado.Peek().Destino;
                 return true;
             }
 
