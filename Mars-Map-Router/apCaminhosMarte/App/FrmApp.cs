@@ -30,10 +30,8 @@ namespace apCaminhosMarte
         internal Stack<AvancoCaminho> CaminhoEncontrado { get => caminhoEncontrado; set => caminhoEncontrado = value; }
         internal AvancoCaminho[] ListaMelhorCaminho { get => listaMelhorCaminho; set => listaMelhorCaminho = value; }
 
-        private PictureBox pbAnterior = new PictureBox();
         private bool dgvClicado = false;
         private string cidadeClicada;
-        private bool dbClick0 = false;
         private bool dbClick = false;
         private bool radio = false;
         private List<AvancoCaminho> listaCaminho = new List<AvancoCaminho>();
@@ -234,7 +232,7 @@ namespace apCaminhosMarte
             {
                 DesenharCidade(cidadeClicada, "Poppins");
             }
-            else if (dbClick0 || dbClick)
+            else if (dbClick)
             {
 
                 if (radioButton1.Checked)
@@ -252,14 +250,7 @@ namespace apCaminhosMarte
                     DesenharCidades("Poppins");
                 }
 
-                if (dbClick)
-                    DesenharCaminhoEspecifico(Color.FromArgb(210, 30, 20));
-                else if (dbClick0)
-                {
-                    DesenharCaminhoEspecifico(Color.FromArgb(0, 0, 185));
-                    radio = true;
-                }
-
+                DesenharCaminhoEspecifico(Color.FromArgb(210, 30, 20));
                 listaCaminho.Clear();
             }
             else
@@ -287,7 +278,6 @@ namespace apCaminhosMarte
             }
 
             dbClick = false;
-            dbClick0 = false;
         }
 
         //Inicialização do form
@@ -404,11 +394,7 @@ namespace apCaminhosMarte
         {
             dgvClicado = false;
             radio = false;
-
-            if (e.RowIndex == 0)
-                dbClick0 = true;
-            else
-                dbClick = true;
+            dbClick = true;
 
             for (int i = 0; i < Resultados[e.RowIndex].Length; i++)
             {

@@ -1,5 +1,6 @@
 ﻿//Eduardo Migueis - 19167 e Rodrigo Smith - 19197
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -113,7 +114,7 @@ namespace apCaminhosMarte.Data
                         var caminho = new AvancoCaminho[caminhoEncontrado.Count];
                         caminhoEncontrado.CopyTo(caminho, 0);
 
-                        resultados.Add(caminho);
+                        resultados.Add(caminho); 
                         caminhoEncontrado.Pop();
                         passou[atual.Id] = false;
                     }
@@ -127,8 +128,10 @@ namespace apCaminhosMarte.Data
 
             if (caminhoEncontrado.Count != 0)
             {
+                passou[atual.Id] = true;
+                atual = caminhoEncontrado.Peek().Destino;
                 caminhoEncontrado.Pop();
-                passou[atual.Id] = false;
+                return true;
             }
 
             return false;
