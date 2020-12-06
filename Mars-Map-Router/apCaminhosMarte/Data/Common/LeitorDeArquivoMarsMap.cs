@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Text;
 
 namespace apCaminhosMarte.Data
@@ -33,6 +32,23 @@ namespace apCaminhosMarte.Data
                 qtdLinhas++;
             }
 
+            SolucionadorDijkstra.Build(qtdLinhas);
+
+            sr = new StreamReader("../../txt/CidadesDes.txt", Encoding.UTF7);
+
+            while (!sr.EndOfStream)
+            {
+                string linha = sr.ReadLine();
+                Arvore.Incluir(new Cidade(int.Parse(linha.Substring(0, 3)),
+                                                    linha.Substring(3, 15).Trim(),
+                                          int.Parse(linha.Substring(18, 5)),
+                                          int.Parse(linha.Substring(23, 5))));
+
+                qtdLinhas++;
+                SolucionadorDijkstra.NovoVertice();
+            }
+
+            sr.Close();
             return Arvore;
         }
 
@@ -52,6 +68,7 @@ namespace apCaminhosMarte.Data
                                                                     int.Parse(linha.Substring(15, 5)))));
             }
 
+            sr.Close();
             return lista;
         }
 
@@ -71,6 +88,7 @@ namespace apCaminhosMarte.Data
                                                                                                                                             int.Parse(linha.Substring(15, 5))));
             }
 
+            sr.Close();
             return lista;
         }
     }

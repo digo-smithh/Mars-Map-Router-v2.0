@@ -29,7 +29,7 @@ namespace apCaminhosMarte
                 Form app = new FrmApp();
                 app.ShowDialog();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageBox.Show("Algum erro inesperado aconteceu. Por favor, tente novamente!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();

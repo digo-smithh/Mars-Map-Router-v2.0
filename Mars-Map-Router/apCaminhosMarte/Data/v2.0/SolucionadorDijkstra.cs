@@ -8,46 +8,38 @@ namespace apCaminhosMarte.Data
 {
     class SolucionadorDijkstra
     {
-        private const int NUM_VERTICES = 20;
-        private Vertice[] vertices;
-        private int[,] adjMatrix;
-        private int numVerts;
+        static private Vertice[] vertices;
+        static private int[,] adjMatrix;
+        static private int numVerts = 0;
 
-        private DistanciaOriginal[] percurso;
-        private const int INFINITY = int.MaxValue;
-        private int verticeAtual;
-        private int doInicioAteAtual;
+        static private DistanciaOriginal[] percurso;
+        static private readonly int INFINITY = int.MaxValue;
+        static private int verticeAtual;
+        static private int doInicioAteAtual;
 
-        public SolucionadorDijkstra()
+        static public void Build(int length)
         {
-            vertices = new Vertice[NUM_VERTICES];
-            adjMatrix = new int[NUM_VERTICES, NUM_VERTICES];
-            numVerts = 0;
+            percurso = new DistanciaOriginal[length];
+            adjMatrix = new int[length, length];
+            vertices = new Vertice[length];
 
-            for (int j = 0; j < NUM_VERTICES; j++)
-                for (int k = 0; k < NUM_VERTICES; k++)
+            for (int j = 0; j < length; j++)
+                for (int k = 0; k < length; k++)
                     adjMatrix[j, k] = INFINITY;
-
-            percurso = new DistanciaOriginal[NUM_VERTICES];
         }
 
-        public void NovoVertice()
+        static public void NovoVertice()
         {
             vertices[numVerts] = new Vertice();
             numVerts++;
         }
 
-        public void NovaAresta(int origem, int destino)
-        {
-            adjMatrix[origem, destino] = 1;
-        }
-
-        public void NovaAresta(int origem, int destino, int peso)
+        static public void NovaAresta(int origem, int destino, int peso)
         {
             adjMatrix[origem, destino] = peso;
         }
 
-        public void ObterMenorCaminho(int inicioDoPercurso, int finalDoPercurso)
+        static public void ObterMenorCaminho(int inicioDoPercurso, int finalDoPercurso)
         {
             for (int j = 0; j < numVerts; j++)
                 vertices[j].FoiVisitado = false;
@@ -70,8 +62,9 @@ namespace apCaminhosMarte.Data
             }
         }
 
-        public int ObterMenor()
+        static private int ObterMenor()
         {
+
             int distanciaMinima = INFINITY;
             int indiceDaMinima = 0;
             for (int j = 0; j < numVerts; j++)
@@ -85,7 +78,7 @@ namespace apCaminhosMarte.Data
             return indiceDaMinima;
         }
 
-        public void AjustarMenorCaminho()
+        static private void AjustarMenorCaminho()
         {
             for (int coluna = 0; coluna < numVerts; coluna++)
             {

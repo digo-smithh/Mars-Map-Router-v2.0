@@ -41,9 +41,6 @@ namespace apCaminhosMarte
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Inicializa o formulário com a interface inicial e padrão.
-        /// </summary>
         private void FrmApp_Load(object sender, EventArgs e)
         {
             panel2.BackColor = Color.FromArgb(255, 60, 80, 185);
@@ -84,9 +81,7 @@ namespace apCaminhosMarte
             lsbOrigem.DisplayMember = "Text";
         }
 
-        /// <summary>
-        /// Lida com o click do botão de buscar.
-        /// </summary>
+
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
             achou = false;
@@ -116,8 +111,8 @@ namespace apCaminhosMarte
                 return;
             }
 
-            origem = Arvore.Busca(new Cidade((lsbOrigem.SelectedItem as LsbItems).Id, default, default, default)); // descobre origem
-            destino = Arvore.Busca(new Cidade((lsbDestino.SelectedItem as LsbItems).Id, default, default, default)); //descobre destino
+            origem = Arvore.Busca(new Cidade((lsbOrigem.SelectedItem as LsbItems).Id, default, default, default));
+            destino = Arvore.Busca(new Cidade((lsbDestino.SelectedItem as LsbItems).Id, default, default, default));
 
             bool temSolucao = false;
 
@@ -125,8 +120,8 @@ namespace apCaminhosMarte
                 temSolucao = Solucionador.BuscarCaminhosR(ref caminhoEncontrado, ref resultados, arvore, origem, destino, ref matrizCaminhos);
             else if (radioButton9.Checked)
                 temSolucao = Solucionador.BuscarCaminhosP(ref caminhoEncontrado, ref resultados, arvore, origem, destino, ref matrizCaminhos);
-            //dijkstra
-
+            else
+                temSolucao = Solucionador.BuscarCaminhosR(ref caminhoEncontrado, ref resultados, arvore, origem, destino, ref matrizCaminhos);
             if (!temSolucao) // chama o método de solução de caminhos
             {
                 //não achou caminhos
@@ -155,6 +150,10 @@ namespace apCaminhosMarte
                 radioButton6.Visible = true;
                 achou = true;
                 ExibirTodosOsCaminhosNoDGV();
+                if (!radioButton8.Checked)
+                    GetMelhorCaminho();
+                else
+                    GetMelhorCaminhoDijkstra();
                 ExibirMelhorCaminhoNoDGV();
                 pbMapa.Refresh();
                 radioButton4.PerformClick();
@@ -221,9 +220,7 @@ namespace apCaminhosMarte
             e.DrawFocusRectangle();
         }
 
-        /// <summary>
-        /// Este event handler verifica qual radioButton está checado para determinar a exibição das linhas entre cidades.
-        /// </summary>
+
         private void pbMapa_Paint(object sender, PaintEventArgs e)
         {
             g = e.Graphics;
@@ -299,11 +296,6 @@ namespace apCaminhosMarte
             radioButton7.PerformClick();
         }
 
-        /// <summary>
-        /// Método que permite que, após redimensionamento, seja possível dar scroll na árvore de cidades.
-        /// </summary>
-        /// <param name="sender">Auto object sender for event</param>
-        /// <param name="e">Auto event argument</param>
         private void FrmApp_Resize(object sender, EventArgs e)
         {
             if (Arvore == null)
@@ -344,6 +336,11 @@ namespace apCaminhosMarte
             if (!radio)
                 return;
 
+            if (radioButton8.Checked)
+                GetMelhorCaminhoDijkstra();
+            else
+                GetMelhorCaminho();
+
             ExibirMelhorCaminhoNoDGV();
             pbMapa.Refresh();
         }
@@ -353,6 +350,11 @@ namespace apCaminhosMarte
             if (!radio)
                 return;
 
+            if (radioButton8.Checked)
+                GetMelhorCaminhoDijkstra();
+            else
+                GetMelhorCaminho();
+
             ExibirMelhorCaminhoNoDGV();
             pbMapa.Refresh();
         }
@@ -361,6 +363,11 @@ namespace apCaminhosMarte
         {
             if (!radio)
                 return;
+
+            if (radioButton8.Checked)
+                GetMelhorCaminhoDijkstra();
+            else
+                GetMelhorCaminho();
 
             ExibirMelhorCaminhoNoDGV();
             pbMapa.Refresh();
@@ -415,9 +422,6 @@ namespace apCaminhosMarte
             pbMapa.Refresh();
         }
 
-        /// <summary>
-        /// Método recursivo que desenha a árvore de cidades na tela.
-        /// </summary>
         private void DesenharArvore(bool primeiraVez, NoArvore<Cidade> raiz, int x, int y, double angulo, double incremento, double comprimento, string font, Graphics g)
         {
             int xf, yf;
@@ -465,12 +469,6 @@ namespace apCaminhosMarte
             }
         }
 
-        /// <summary>
-        /// Desenha as cidades no mapa de acordo com sua coordenada. 
-        /// Usa-se uma regra de 3 para definir a nova coordenada 
-        /// baseada na width e height da tela.
-        /// </summary>
-        /// <param name="font">Fonte a ser usada.</param>
         private void DesenharCidades(string font)
         {
             for (int i = 0; i < Arvore.Qtd; i++)
@@ -510,9 +508,6 @@ namespace apCaminhosMarte
             }
         }
 
-        /// <summary>
-        /// Exibe todos os caminhos encontrados e armazenados na List resultados nos DataGridViews do form.
-        /// </summary>
         private void ExibirTodosOsCaminhosNoDGV()
         {
             var listLength = new List<int>();
@@ -551,20 +546,41 @@ namespace apCaminhosMarte
             }
         }
 
-        /// <summary>
-        /// Acessa o melhor caminho e o exibe no DataGridView.
-        /// </summary>
-        private void ExibirMelhorCaminhoNoDGV()
+        private void GetMelhorCaminho()
         {
-            dataGridView2.Rows.Clear();
-            dataGridView2.Columns.Clear();
-
             if (radioButton4.Checked)
                 ListaMelhorCaminho = Solucionador.BuscarMelhorCaminhoDistancia(Resultados);
             else if (radioButton5.Checked)
                 ListaMelhorCaminho = Solucionador.BuscarMelhorCaminhoTempo(Resultados);
             else
                 ListaMelhorCaminho = Solucionador.BuscarMelhorCaminhoCusto(Resultados);
+        }
+
+        private void GetMelhorCaminhoDijkstra()
+        {
+            for (int i = 0; i < matrizCaminhos.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrizCaminhos.GetLength(1); j++)
+                {
+                    AvancoCaminho ac = matrizCaminhos[i, j];
+
+                    if (ac != null)
+                    {
+                        if (radioButton4.Checked)
+                            SolucionadorDijkstra.NovaAresta(ac.Origem.Id, ac.Destino.Id, ac.Caminho.Distancia);
+                        else if (radioButton5.Checked)
+                            SolucionadorDijkstra.NovaAresta(ac.Origem.Id, ac.Destino.Id, ac.Caminho.Tempo);
+                        else
+                            SolucionadorDijkstra.NovaAresta(ac.Origem.Id, ac.Destino.Id, ac.Caminho.Custo);
+                    }
+                }
+            }
+        }
+
+        private void ExibirMelhorCaminhoNoDGV()
+        {
+            dataGridView2.Rows.Clear();
+            dataGridView2.Columns.Clear();
 
             for (int i = 0; i < ListaMelhorCaminho.Length + 1; i++)
             {
@@ -591,9 +607,6 @@ namespace apCaminhosMarte
             }
         }
 
-        /// <summary>
-        /// Desenha o melhor caminho na tela usando uma Pen e os mesmos GrA
-        /// </summary>
         private void DesenharMelhorCaminho()
         {
             for (int i = 0; i < ListaMelhorCaminho.Length; i++)
