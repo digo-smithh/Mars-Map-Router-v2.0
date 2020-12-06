@@ -59,14 +59,17 @@
       <DependentUpon>FrmInit.cs</DependentUpon>
     </Compile>
     <Compile Include="App\Program.cs" />
-    <Compile Include="Data\ArvoreBinaria.cs" />
-    <Compile Include="Data\AvancoCaminho.cs" />
-    <Compile Include="Data\CaminhoEntreCidades.cs" />
-    <Compile Include="Data\Cidade.cs" />
-    <Compile Include="Data\LeitorDeArquivoMarsMap.cs" />
-    <Compile Include="Data\LsbItems.cs" />
-    <Compile Include="Data\NoArvore.cs" />
-    <Compile Include="Data\Solucionador.cs" />
+    <Compile Include="Data\v1.0\ArvoreBinaria.cs" />
+    <Compile Include="Data\Common\AvancoCaminho.cs" />
+    <Compile Include="Data\Common\CaminhoEntreCidades.cs" />
+    <Compile Include="Data\Common\Cidade.cs" />
+    <Compile Include="Data\v2.0\DistanciaOriginal.cs" />
+    <Compile Include="Data\v2.0\SolucionadorDijkstra.cs" />
+    <Compile Include="Data\Common\LeitorDeArquivoMarsMap.cs" />
+    <Compile Include="Data\Common\LsbItems.cs" />
+    <Compile Include="Data\v1.0\NoArvore.cs" />
+    <Compile Include="Data\v1.0\Solucionador.cs" />
+    <Compile Include="Data\v2.0\Vertice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="App\FrmApp.resx">
       <DependentUpon>FrmApp.cs</DependentUpon>

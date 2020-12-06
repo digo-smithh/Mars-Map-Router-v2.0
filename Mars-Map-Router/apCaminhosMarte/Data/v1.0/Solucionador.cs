@@ -6,21 +6,8 @@ using System.Linq;
 
 namespace apCaminhosMarte.Data
 {
-    /// <summary>
-    /// Classe estática para encontrar caminhos entre cidades.
-    /// </summary>
     static class Solucionador
     {
-        /// <summary>
-        /// Busca todos os caminhos entre duas cidades.
-        /// </summary>
-        /// <param name="caminhoEncontrado">Stack vazia para armazenamento de caminho</param>
-        /// <param name="resultados">List<AvancoCaminho[]> vazia para receber os resultados</param>
-        /// <param name="arvore">ArvoreBinaria de cidades.</param>
-        /// <param name="origem">Objeto de Cidade que representa a origem</param>
-        /// <param name="destino">Objeto de Cidade que representa o destino final</param>
-        /// <param name="matrizCaminhos">Matriz esparssa de caminhos.</param>
-        /// <returns>Retorna true se existe caminho e false se não existe</returns>
         static public bool BuscarCaminhosR(ref Stack<AvancoCaminho> caminhoEncontrado, ref List<AvancoCaminho[]> resultados, ArvoreBinaria<Cidade> arvore, Cidade origem, Cidade destino, ref AvancoCaminho[,] matrizCaminhos)
         {
             caminhoEncontrado = new Stack<AvancoCaminho>();
@@ -39,31 +26,16 @@ namespace apCaminhosMarte.Data
         {
             caminhoEncontrado = new Stack<AvancoCaminho>();
             resultados = new List<AvancoCaminho[]>();
-            var passou = new bool[arvore.Qtd];
-            bool repetir;
             Cidade atual = origem;
 
-            do
-            {
-                repetir = BuscarCaminhosPilhas(ref atual, ref destino, ref matrizCaminhos, ref caminhoEncontrado, ref resultados, ref passou);
-            }
-            while (repetir);
-
+            BuscarCaminhosPilhas(ref atual, ref destino, ref matrizCaminhos, ref caminhoEncontrado, ref resultados);
+        
             if (resultados.Count <= 0)
                 return false;
 
             return true;
         }
 
-        /// <summary>
-        /// Método recursivo para busca de caminhos. Esse método efetua a real busca de caminhos na classe.
-        /// </summary>
-        /// <param name="atual">Cidade sendo percorrida naquela iteração do método.</param>
-        /// <param name="destino">Cidade objetivo como destino.</param>
-        /// <param name="matrizCaminhos">Matriz esparssa que relaciona caminhos e cidades.</param>
-        /// <param name="caminhoEncontrado">Stack que contém a sucessão de AvancosCaminhos para chegar ao destino final.</param>
-        /// <param name="resultados">Conjunto de stacks que possuem todas as relções de caminhos do origem inicial a destino final.</param>
-        /// <param name="passou">Vetor boolean que especifica se a iteração do método passou por uma cidade específica (relativo ao id).</param>
         static private void BuscarCaminhosRecursivo(Cidade atual, ref Cidade destino, ref AvancoCaminho[,] matrizCaminhos, ref Stack<AvancoCaminho> caminhoEncontrado, ref List<AvancoCaminho[]> resultados, ref bool[] passou)
         {
             for (int j = 0; j < matrizCaminhos.GetLength(1); j++)
@@ -98,51 +70,54 @@ namespace apCaminhosMarte.Data
             }
         }
 
-        static public bool BuscarCaminhosPilhas(ref Cidade atual, ref Cidade destino, ref AvancoCaminho[,] matrizCaminhos, ref Stack<AvancoCaminho> caminhoEncontrado, ref List<AvancoCaminho[]> resultados, ref bool[] passou)
+        static public void BuscarCaminhosPilhas(ref Cidade atual, ref Cidade destino, ref AvancoCaminho[,] matrizCaminhos, ref Stack<AvancoCaminho> caminhoEncontrado, ref List<AvancoCaminho[]> resultados)
         {
-            for (int j = 0; j < matrizCaminhos.GetLength(1); j++)
+            bool temCaminhoPossivel = true;
+            bool movimentou;
+            int idAtual = atual.Id;
+            int start = 0;
+            bool[] passou = new bool[matrizCaminhos.GetLength(0)];
+
+            while (temCaminhoPossivel)
             {
-                AvancoCaminho ac = matrizCaminhos[atual.Id, j];
-
-                if (ac != null && !passou[j])
+                passou[idAtual] = true;
+                movimentou = false;
+                for (int j = start; j < matrizCaminhos.GetLength(0); j++)
                 {
-                    passou[atual.Id] = true;
-                    caminhoEncontrado.Push(ac);
-
-                    if (j == destino.Id)
+                    AvancoCaminho ac = matrizCaminhos[idAtual, j];
+                    if (ac != null && !passou[j])
                     {
-                        var caminho = new AvancoCaminho[caminhoEncontrado.Count];
-                        caminhoEncontrado.CopyTo(caminho, 0);
-
-                        resultados.Add(caminho); 
-                        caminhoEncontrado.Pop();
-                        passou[atual.Id] = false;
+                        if (j == destino.Id)
+                        {
+                            caminhoEncontrado.Push(matrizCaminhos[idAtual, j]);
+                            resultados.Add(caminhoEncontrado.ToArray());
+                            caminhoEncontrado.Pop();
+                        }
+                        else
+                        {
+                            caminhoEncontrado.Push(matrizCaminhos[idAtual, j]);
+                            idAtual = j;
+                            movimentou = true;
+                            start = 0;
+                            break;
+                        }
                     }
+                }
+
+                if (!movimentou)
+                {
+                    if (caminhoEncontrado.Count() == 0)
+                        temCaminhoPossivel = false;
                     else
                     {
-                        atual = ac.Destino;
-                        return true;
+                        passou[idAtual] = false;
+                        start = idAtual + 1;
+                        idAtual = caminhoEncontrado.Pop().Origem.Id;
                     }
                 }
             }
-
-            if (caminhoEncontrado.Count != 0)
-            {
-                passou[atual.Id] = true;   
-                caminhoEncontrado.Pop();
-                if (caminhoEncontrado.Count != 0)
-                    atual = caminhoEncontrado.Peek().Destino;
-                return true;
-            }
-
-            return false;
         }
 
-        /// <summary>
-        /// Busca o melhor caminho, baseado na distância, dentre os vetores de AvancoCaminho guardados numa List.
-        /// </summary>
-        /// <param name="caminhos">List<AvancoCaminho[]> com todos os caminhos entre duas cidades.</param>
-        /// <returns>Retorna um vetor de AvancoCaminho contendo  melhor caminho(menor distância) entre duas cidades.</returns>
         static public AvancoCaminho[] BuscarMelhorCaminhoDistancia(List<AvancoCaminho[]> caminhos)
         {
             var distancias = new List<int>();
@@ -162,11 +137,6 @@ namespace apCaminhosMarte.Data
             return caminhos[distancias.IndexOf(distancias.Min())];
         }
 
-        /// <summary>
-        /// Busca o melhor caminho, baseado no tempo, dentre os vetores de AvancoCaminho guardados numa List.
-        /// </summary>
-        /// <param name="caminhos">List<AvancoCaminho[]> com todos os caminhos entre duas cidades.</param>
-        /// <returns>Retorna um vetor de AvancoCaminho contendo  melhor caminho(menor distância) entre duas cidades.</returns>
         static public AvancoCaminho[] BuscarMelhorCaminhoTempo(List<AvancoCaminho[]> caminhos)
         {
             var tempos = new List<int>();
@@ -186,11 +156,6 @@ namespace apCaminhosMarte.Data
             return caminhos[tempos.IndexOf(tempos.Min())];
         }
 
-        /// <summary>
-        /// Busca o melhor caminho, baseado na custo, dentre os vetores de AvancoCaminho guardados numa List.
-        /// </summary>
-        /// <param name="caminhos">List<AvancoCaminho[]> com todos os caminhos entre duas cidades.</param>
-        /// <returns>Retorna um vetor de AvancoCaminho contendo  melhor caminho(menor distância) entre duas cidades.</returns>
         static public AvancoCaminho[] BuscarMelhorCaminhoCusto(List<AvancoCaminho[]> caminhos)
         {
             var custos = new List<int>();
