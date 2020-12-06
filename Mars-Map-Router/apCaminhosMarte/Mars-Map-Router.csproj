@@ -63,7 +63,7 @@
     <Compile Include="Data\Common\AvancoCaminho.cs" />
     <Compile Include="Data\Common\CaminhoEntreCidades.cs" />
     <Compile Include="Data\Common\Cidade.cs" />
-    <Compile Include="Data\v2.0\DistanciaOriginal.cs" />
+    <Compile Include="Data\v2.0\Caminho.cs" />
     <Compile Include="Data\v2.0\SolucionadorDijkstra.cs" />
     <Compile Include="Data\Common\LeitorDeArquivoMarsMap.cs" />
     <Compile Include="Data\Common\LsbItems.cs" />

@@ -1,11 +1,11 @@
 ﻿namespace apCaminhosMarte.Data
 {
-    class DistanciaOriginal
+    class Caminho
     {
         public int Distancia { get; set; }
         public int VerticePai { get; set; }
 
-        public DistanciaOriginal(int vp, int d)
+        public Caminho(int vp, int d)
         {
             Distancia = d;
             VerticePai = vp;

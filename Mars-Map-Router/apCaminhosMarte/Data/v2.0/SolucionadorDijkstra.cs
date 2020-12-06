@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace apCaminhosMarte.Data
+﻿namespace apCaminhosMarte.Data
 {
     class SolucionadorDijkstra
     {
         static private Vertice[] vertices;
         static private int[,] adjMatrix;
-        static private int numVerts = 0;
+        static private int numVerts;
 
-        static private DistanciaOriginal[] percurso;
+        static public Caminho[] percurso;
         static private readonly int INFINITY = int.MaxValue;
         static private int verticeAtual;
         static private int doInicioAteAtual;
 
         static public void Build(int length)
         {
-            percurso = new DistanciaOriginal[length];
+            percurso = new Caminho[length];
             adjMatrix = new int[length, length];
             vertices = new Vertice[length];
+            numVerts = 0;
 
             for (int j = 0; j < length; j++)
                 for (int k = 0; k < length; k++)
@@ -48,7 +43,7 @@ namespace apCaminhosMarte.Data
             for (int j = 0; j < numVerts; j++)
             {
                 int tempDist = adjMatrix[inicioDoPercurso, j];
-                percurso[j] = new DistanciaOriginal(inicioDoPercurso, tempDist);
+                percurso[j] = new Caminho(inicioDoPercurso, tempDist);
             }
 
             for (int nTree = 0; nTree < numVerts; nTree++)
