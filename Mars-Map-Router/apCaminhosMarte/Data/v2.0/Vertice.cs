@@ -4,9 +4,11 @@
     {
         public bool FoiVisitado { get; set; }
         public bool EstaAtivo { get; set; }
+        public Cidade Cidade { get; set; }
 
-        public Vertice()
+        public Vertice(Cidade cidade)
         {
+            Cidade = cidade;
             FoiVisitado = false;
             EstaAtivo = true;
         }

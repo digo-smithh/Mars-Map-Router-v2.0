@@ -32,19 +32,13 @@ namespace apCaminhosMarte.Data
                 qtdLinhas++;
             }
 
-            SolucionadorDijkstra.Build(qtdLinhas);
+            SolucionadorDijkstra.Build(qtdLinhas, Arvore);
 
             sr = new StreamReader("../../txt/CidadesDes.txt", Encoding.UTF7);
 
             while (!sr.EndOfStream)
             {
-                string linha = sr.ReadLine();
-                Arvore.Incluir(new Cidade(int.Parse(linha.Substring(0, 3)),
-                                                    linha.Substring(3, 15).Trim(),
-                                          int.Parse(linha.Substring(18, 5)),
-                                          int.Parse(linha.Substring(23, 5))));
-
-                qtdLinhas++;
+                sr.ReadLine();
                 SolucionadorDijkstra.NovoVertice();
             }
 

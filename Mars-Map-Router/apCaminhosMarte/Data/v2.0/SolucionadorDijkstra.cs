@@ -1,18 +1,22 @@
-﻿namespace apCaminhosMarte.Data
+﻿using System.Collections.Generic;
+
+namespace apCaminhosMarte.Data
 {
     class SolucionadorDijkstra
     {
         static private Vertice[] vertices;
-        static private int[,] adjMatrix;
+        static public int[,] adjMatrix;
         static private int numVerts;
+        static private ArvoreBinaria<Cidade> arvoreCidades;
 
         static public Caminho[] percurso;
         static private readonly int INFINITY = int.MaxValue;
         static private int verticeAtual;
         static private int doInicioAteAtual;
 
-        static public void Build(int length)
+        static public void Build(int length, ArvoreBinaria<Cidade> arvore)
         {
+            arvoreCidades = arvore;
             percurso = new Caminho[length];
             adjMatrix = new int[length, length];
             vertices = new Vertice[length];
@@ -25,7 +29,7 @@
 
         static public void NovoVertice()
         {
-            vertices[numVerts] = new Vertice();
+            vertices[numVerts] = new Vertice(arvoreCidades.Busca(new Cidade(numVerts, default, default, default)));
             numVerts++;
         }
 
@@ -34,7 +38,7 @@
             adjMatrix[origem, destino] = peso;
         }
 
-        static public void ObterMenorCaminho(int inicioDoPercurso, int finalDoPercurso)
+        static public Stack<int> ObterMenorCaminho(int inicioDoPercurso, int finalDoPercurso)
         {
             for (int j = 0; j < numVerts; j++)
                 vertices[j].FoiVisitado = false;
@@ -52,9 +56,21 @@
                 int distanciaMinima = percurso[indiceDoMenor].Distancia;
                 verticeAtual = indiceDoMenor;
                 doInicioAteAtual = percurso[indiceDoMenor].Distancia;
+
                 vertices[verticeAtual].FoiVisitado = true;
                 AjustarMenorCaminho();
             }
+
+            int i = finalDoPercurso;
+            Stack<int> pilha = new Stack<int>();
+
+            while (i != inicioDoPercurso)
+            {
+                i = percurso[i].VerticePai;
+                pilha.Push(vertices[i].Cidade.Id);
+            }
+
+            return pilha;
         }
 
         static private int ObterMenor()

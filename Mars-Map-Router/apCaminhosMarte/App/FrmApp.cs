@@ -18,6 +18,7 @@ namespace apCaminhosMarte
         private List<AvancoCaminho[]> resultados;
         private Stack<AvancoCaminho> caminhoEncontrado;
         private AvancoCaminho[] listaMelhorCaminho;
+        private Cidade[] listaMelhorCaminhoDijkstra;
 
         internal ArvoreBinaria<Cidade> Arvore { get => arvore; set => arvore = value; }
         internal AvancoCaminho[,] MatrizCaminhos { get => matrizCaminhos; set => matrizCaminhos = value; }
@@ -25,6 +26,7 @@ namespace apCaminhosMarte
         internal List<AvancoCaminho[]> Resultados { get => resultados; set => resultados = value; }
         internal Stack<AvancoCaminho> CaminhoEncontrado { get => caminhoEncontrado; set => caminhoEncontrado = value; }
         internal AvancoCaminho[] ListaMelhorCaminho { get => listaMelhorCaminho; set => listaMelhorCaminho = value; }
+        internal Cidade[] ListaMelhorCaminhoDijkstra { get => listaMelhorCaminhoDijkstra; set => listaMelhorCaminhoDijkstra = value; }
 
         private bool achou = false;
         private Graphics g;
@@ -161,6 +163,7 @@ namespace apCaminhosMarte
                     ExibirMelhorCaminhoDijkstraNoDGV();
                 }
                 //pbMapa.Refresh();
+                radioButton3.PerformClick();
                 radioButton4.PerformClick();
             }
         }
@@ -298,6 +301,7 @@ namespace apCaminhosMarte
             panel7.Controls[panel7.Controls.IndexOf(panel8)].BringToFront();
 
             radioButton3.PerformClick();
+            radioButton4.PerformClick();
             radioButton7.PerformClick();
         }
 
@@ -342,7 +346,7 @@ namespace apCaminhosMarte
 
             if (radioButton8.Checked)
             {
-                SolucionadorDijkstra.Build(arvore.Qtd);
+                SolucionadorDijkstra.Build(arvore.Qtd, arvore);
                 for (int i = 0; i < arvore.Qtd; i++)
                 {
                     SolucionadorDijkstra.NovoVertice();
@@ -366,7 +370,7 @@ namespace apCaminhosMarte
 
             if (radioButton8.Checked)
             {
-                SolucionadorDijkstra.Build(arvore.Qtd);
+                SolucionadorDijkstra.Build(arvore.Qtd, arvore);
                 for (int i = 0; i < arvore.Qtd; i++)
                 {
                     SolucionadorDijkstra.NovoVertice();
@@ -390,7 +394,7 @@ namespace apCaminhosMarte
 
             if (radioButton8.Checked)
             {
-                SolucionadorDijkstra.Build(arvore.Qtd);
+                SolucionadorDijkstra.Build(arvore.Qtd, arvore);
                 for(int i = 0; i < arvore.Qtd; i++)
                 {
                     SolucionadorDijkstra.NovoVertice();
@@ -601,16 +605,31 @@ namespace apCaminhosMarte
                     if (ac != null)
                     {
                         if (radioButton4.Checked)
+                        {
+                            ListaMelhorCaminho = Solucionador.BuscarMelhorCaminhoDistancia(Resultados);
                             SolucionadorDijkstra.NovaAresta(ac.Origem.Id, ac.Destino.Id, ac.Caminho.Distancia);
+                        }
                         else if (radioButton5.Checked)
+                        {
+                            ListaMelhorCaminho = Solucionador.BuscarMelhorCaminhoTempo(Resultados);
                             SolucionadorDijkstra.NovaAresta(ac.Origem.Id, ac.Destino.Id, ac.Caminho.Tempo);
+                        }
                         else
+                        {
+                            ListaMelhorCaminho = Solucionador.BuscarMelhorCaminhoCusto(Resultados);
                             SolucionadorDijkstra.NovaAresta(ac.Origem.Id, ac.Destino.Id, ac.Caminho.Custo);
+                        }
                     }
                 }
             }
 
-            SolucionadorDijkstra.ObterMenorCaminho(origem.Id, destino.Id);
+            var array = SolucionadorDijkstra.ObterMenorCaminho(origem.Id, destino.Id).ToArray();
+            ListaMelhorCaminhoDijkstra = new Cidade[array.Length];
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                ListaMelhorCaminhoDijkstra[i] = arvore.Busca(new Cidade(array[i], default, default, default));
+            }
         }
 
         private void ExibirMelhorCaminhoNoDGV()
@@ -647,7 +666,30 @@ namespace apCaminhosMarte
         {
             dataGridView2.Rows.Clear();
             dataGridView2.Columns.Clear();
-            var teste = SolucionadorDijkstra.percurso;
+
+            for (int i = 0; i < ListaMelhorCaminhoDijkstra.Length + 1; i++)
+            {
+                dataGridView2.Columns.Add(i + "", i + "");
+            }
+
+            dataGridView2.Rows.Add();
+
+            int k = ListaMelhorCaminhoDijkstra.Length - 1;
+
+            for (int i = 0; i < ListaMelhorCaminhoDijkstra.Length; i++)
+            {
+                dataGridView2.Rows[0].Cells[i].Value = ListaMelhorCaminhoDijkstra[k].Nome + " ->";
+
+                if (i == ListaMelhorCaminhoDijkstra.Length - 1)
+                    dataGridView2.Rows[0].Cells[i + 1].Value = ListaMelhorCaminhoDijkstra[k].Nome + "";
+
+                k--;
+            }
+
+            foreach (DataGridViewColumn column in dataGridView2.Columns)
+            {
+                column.Width = 127;
+            }
         }
 
         private void DesenharMelhorCaminho()
